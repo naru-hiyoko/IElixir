@@ -26,9 +26,10 @@ defmodule IElixir do
       {:ok, ctx} = :erlzmq.context()
       ielixir_path  = File.cwd!()
       File.cd!(System.get_env("WORKING_DIRECTORY", File.cwd!()))
+      Logger.info("Start jupyter kernel client.")
       IElixir.Supervisor.start_link(conn_info: conn_info, ctx: ctx, starting_path: ielixir_path)
     else
-      Logger.info("Start without IElixir workers.")
+      Logger.info("Start without jupyter kernel client. (Set 'true' for USE_IELIXIR)")
       IElixir.DummySupervisor.start_link([])
     end
   end

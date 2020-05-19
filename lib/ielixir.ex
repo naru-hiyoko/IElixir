@@ -18,7 +18,7 @@ defmodule IElixir do
       File.cd!(Application.get_env(:ielixir, :working_directory, File.cwd!()))
       IElixir.Supervisor.start_link(conn_info: conn_info, ctx: ctx, starting_path: ielixir_path)
     else
-      Task.start(fn -> nil end)
+      IElixir.DummySupervisor.start_link([])
     end
   end
 end

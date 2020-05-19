@@ -5,7 +5,8 @@ config :logger,
 
 config :ielixir, connection_file: "test/test_connection_file"
 
+config :ielixir, use_ielixir: true
+
 config :ielixir, IElixir.Repo,
   adapter: Sqlite.Ecto,
   database: "test_db.sqlite3"
-

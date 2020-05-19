@@ -8,13 +8,17 @@ defmodule IElixir do
 
   @doc false
   def start(_type, _args) do
-    conn_info =
-      Application.get_env(:ielixir, :connection_file)
-      |> Utils.parse_connection_file()
+    if System.get_env("USE_IELIXIR") == "true" do
+      conn_info =
+        Application.get_env(:ielixir, :connection_file)
+        |> Utils.parse_connection_file()
 
-    {:ok, ctx} = :erlzmq.context()
-    ielixir_path  = File.cwd!()
-    File.cd!(Application.get_env(:ielixir, :working_directory, File.cwd!()))
-    IElixir.Supervisor.start_link(conn_info: conn_info, ctx: ctx, starting_path: ielixir_path)
+      {:ok, ctx} = :erlzmq.context()
+      ielixir_path  = File.cwd!()
+      File.cd!(Application.get_env(:ielixir, :working_directory, File.cwd!()))
+      IElixir.Supervisor.start_link(conn_info: conn_info, ctx: ctx, starting_path: ielixir_path)
+    else
+      Task.start(fn -> nil end)
+    end
   end
 end

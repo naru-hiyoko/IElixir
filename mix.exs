@@ -33,7 +33,7 @@ defmodule IElixir.Mixfile do
 
   defp deps do
     [{:erlzmq, "~> 3.0"},
-     {:poison, "~> 3.0"},
+     {:poison, "~> 2.2.0"},
      {:uuid_erl, "~> 1.7.5", app: false},
 
      # Docs dependencies

@@ -13,7 +13,6 @@ defmodule IElixir.Socket.Shell do
   alias IElixir.Socket.IOPub
   alias IElixir.Message
   alias IElixir.Sandbox
-  alias IElixir.Queries
 
   @doc false
   def start_link(opts) do
@@ -85,7 +84,6 @@ defmodule IElixir.Socket.Shell do
     |> publish_output()
     |> publish_stderr()
     |> publish_execute_response()
-    |> update_history()
     |> send_execute_reply()
 
     IOPub.send_status("idle", message)
@@ -206,20 +204,6 @@ defmodule IElixir.Socket.Shell do
     response
   end
 
-  defp update_history(response = %{status: :error}) do
-    response
-  end
-  defp update_history(response = %{silent: true}) do
-    response
-  end
-  defp update_history(response = %{status: :ok}) do
-    Queries.insert(response.message.header["session"],
-                   response.count,
-                   response.message.content["code"],
-                   response.output)
-    response
-  end
-
   defp send_execute_reply(response = %{status: :ok}) do
     content = %{
       status: "ok",
@@ -268,7 +252,7 @@ defmodule IElixir.Socket.Shell do
 
   defp send_history_reply(sock, message) do
     content = %{
-      history: Queries.get_entries_list(message.content["output"])
+      history: []
     }
     Message.send_message(sock, message, "history_reply", content)
   end

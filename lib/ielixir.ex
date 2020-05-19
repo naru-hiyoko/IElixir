@@ -4,6 +4,7 @@ defmodule IElixir do
   """
 
   use Application
+  require Logger
   alias IElixir.Utils
 
   @doc false
@@ -27,6 +28,7 @@ defmodule IElixir do
       File.cd!(System.get_env("WORKING_DIRECTORY", File.cwd!()))
       IElixir.Supervisor.start_link(conn_info: conn_info, ctx: ctx, starting_path: ielixir_path)
     else
+      Logger.info("Start without IElixir workers.")
       IElixir.DummySupervisor.start_link([])
     end
   end
